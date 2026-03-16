@@ -1,75 +1,125 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4c75a3" />
+    <!-- Предотвращаем кэширование (на время разработки) -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <title>Календарь МедМол УГМУ</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://vk.com/js/api/bridge_api.js?169"></script>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-            background-color: #f0f2f5;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            text-align: center;
+            margin-top: 60px;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         h1 {
             color: #4c75a3;
+            font-size: 28px;
+            margin-bottom: 16px;
         }
+
+        p {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
         .btn {
             display: inline-block;
-            padding: 15px 30px;
+            padding: 16px 32px;
             font-size: 18px;
+            font-weight: 600;
             color: white;
             background-color: #4c75a3;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             text-decoration: none;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: background-color 0.3s;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            user-select: none;
         }
+
         .btn:hover {
             background-color: #3a5a78;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
         #loader {
-            display: none;
             font-size: 16px;
-            color: #555;
+            color: #666;
+            margin-top: 20px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <h1>Календарь МедМол УГМУ</h1>
-    <p id="loader">Инициализация... Подождите</p>
-    <p><button onclick="openCalendar()" class="btn">Открыть календарь</button></p>
+    <div class="container">
+        <h1>Календарь МедМол УГМУ</h1>
+        <p>Нажмите кнопку ниже, чтобы открыть календарь занятий.</p>
+        <a href="https://calendar.yandex.ru/month?layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ"
+           target="_blank"
+           class="btn"
+           id="open-calendar-btn">
+            Открыть календарь
+        </a>
+        <div id="loader">Загрузка приложения...</div>
+    </div>
 
-    <script>
-        // Инициализация VK Bridge
-        document.getElementById('loader').style.display = 'block';
+    <!-- Подключаем SDK ВКонтакте -->
+    <script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
+    <script type="text/javascript">
+        // Проверяем, загружено ли приложение в iframe ВКонтакте
+        document.addEventListener('DOMContentLoaded', function () {
+            const loader = document.getElementById('loader');
 
-        window.addEventListener('DOMContentLoaded', () => {
-            if (window.VK) {
-                VK.init(() => {
-                    document.getElementById('loader').textContent = 'Готово!';
-                }, (error) => {
-                    document.getElementById('loader').textContent = 'Ошибка инициализации';
-                });
+            // Ждём инициализации VK
+            if (window.VK && window.VK.WebApp) {
+                // Говорим ВК: приложение готово
+                window.VK.WebApp.ready();
+                loader.style.display = 'none';
+
+                // Опционально: расширить на весь экран
+                // window.VK.WebApp.expand();
             } else {
-                document.getElementById('loader').textContent = 'VK SDK не загружен';
+                // Не в контексте ВК — можно оставить лоадер или скрыть
+                loader.textContent = 'Откройте через приложение ВКонтакте';
             }
+
+            // Дополнительно: скрываем лоадер через 3 секунды, если что-то пошло не так
+            setTimeout(() => {
+                if (loader.style.display !== 'none') {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 300);
+                }
+            }, 3000);
         });
-
-        function openCalendar() {
-            const calendarUrl = "https://calendar.yandex.ru/month?layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ";
-            
-            if (window.VK) {
-                // Открываем во внешнем браузере VK
-                VK.callAPIMethod('utils.openLink', { url: calendarUrl });
-            } else {
-                // Резервный вариант
-                window.open(calendarUrl, '_blank');
-            }
-        }
     </script>
 </body>
 </html>
