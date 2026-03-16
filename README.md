@@ -1,1 +1,76 @@
 # medmol.github.io
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Календарь МедМол УГМУ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://vk.com/js/api/bridge_api.js?169"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f0f2f5;
+        }
+        h1 {
+            color: #4c75a3;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: white;
+            background-color: #4c75a3;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #3a5a78;
+        }
+        #loader {
+            display: none;
+            font-size: 16px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Календарь МедМол УГМУ</h1>
+    <p id="loader">Инициализация... Подождите</p>
+    <p><button onclick="openCalendar()" class="btn">Открыть календарь</button></p>
+
+    <script>
+        // Инициализация VK Bridge
+        document.getElementById('loader').style.display = 'block';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.VK) {
+                VK.init(() => {
+                    document.getElementById('loader').textContent = 'Готово!';
+                }, (error) => {
+                    document.getElementById('loader').textContent = 'Ошибка инициализации';
+                });
+            } else {
+                document.getElementById('loader').textContent = 'VK SDK не загружен';
+            }
+        });
+
+        function openCalendar() {
+            const calendarUrl = "https://calendar.yandex.ru/month?layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ";
+            
+            if (window.VK) {
+                // Открываем во внешнем браузере VK
+                VK.callAPIMethod('utils.openLink', { url: calendarUrl });
+            } else {
+                // Резервный вариант
+                window.open(calendarUrl, '_blank');
+            }
+        }
+    </script>
+</body>
+</html>
