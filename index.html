@@ -8,67 +8,49 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f0f2f5;
-            color: #333;
             margin: 0;
-            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            color: #4c75a3;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
+        .calendar-container {
+            flex: 1;
+            width: 100%;
+            border: none;
+            overflow: hidden;
         }
         .calendar-frame {
             width: 100%;
-            height: 80vh;
-            min-height: 600px;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        #loader {
-            text-align: center;
-            color: #666;
-            margin-top: 20px;
-            font-style: italic;
+            height: 100%;
+            min-height: 100vh;
+            border: none;
+            border-radius: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Календарь МедМол УГМУ</h1>
-        <!-- Ваш публичный календарь -->
+    <!-- Прямо встраиваем календарь -->
+    <div class="calendar-container">
         <iframe 
             class="calendar-frame"
             src="https://calendar.yandex.ru/embed/month?&layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ"
             frameborder="0"
             allowfullscreen>
         </iframe>
-        <div id="loader">Загрузка календаря...</div>
     </div>
 
     <!-- Подключаем SDK ВКонтакте -->
     <script src="https://vk.com/js/api/xd_connection.js?2"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Инициализируем Mini App
+            // Говорим ВК: приложение готово
             if (window.VK && window.VK.WebApp) {
                 window.VK.WebApp.ready();
-                window.VK.WebApp.expand(); // Раскрыть на весь экран
+                window.VK.WebApp.expand(); // Открыть на весь экран
             }
-
-            // Скрываем лоадер после загрузки iframe
-            const frame = document.querySelector('.calendar-frame');
-            frame.addEventListener('load', () => {
-                document.getElementById('loader').style.display = 'none';
-            });
         });
     </script>
 </body>
