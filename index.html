@@ -3,108 +3,71 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#4c75a3" />
     <title>Календарь МедМол УГМУ</title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            text-align: center;
-            margin-top: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f0f2f5;
             color: #333;
-            line-height: 1.6;
+            margin: 0;
+            padding: 0;
         }
-
         .container {
-            max-width: 600px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
-
         h1 {
             color: #4c75a3;
-            font-size: 28px;
-            margin-bottom: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
         }
-
-        p {
-            color: #555;
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 16px 32px;
-            font-size: 18px;
-            font-weight: 600;
-            color: white;
-            background-color: #4c75a3;
-            border: none;
+        .calendar-frame {
+            width: 100%;
+            height: 80vh;
+            min-height: 600px;
+            border: 1px solid #eee;
             border-radius: 12px;
-            text-decoration: none;
-            cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-            user-select: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
-        .btn:hover {
-            background-color: #3a5a78;
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
         #loader {
-            font-size: 16px;
+            text-align: center;
             color: #666;
             margin-top: 20px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Календарь МедМол УГМУ</h1>
-        <p>Нажмите кнопку, чтобы открыть календарь прямо в приложении ВК.</p>
-        <button class="btn" id="open-calendar-btn">Открыть календарь</button>
-        <div id="loader">Готовимся к запуску...</div>
+        <!-- Ваш публичный календарь -->
+        <iframe 
+            class="calendar-frame"
+            src="https://calendar.yandex.ru/embed/month?&layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ"
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+        <div id="loader">Загрузка календаря...</div>
     </div>
 
     <!-- Подключаем SDK ВКонтакте -->
     <script src="https://vk.com/js/api/xd_connection.js?2"></script>
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            const button = document.getElementById('open-calendar-btn');
-            const loader = document.getElementById('loader');
-
-            // Проверяем, загружено ли приложение в контексте ВК
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Инициализируем Mini App
             if (window.VK && window.VK.WebApp) {
-                window.VK.WebApp.ready(); // Обязательно!
-                loader.style.display = 'none';
-            } else {
-                loader.textContent = 'Откройте через приложение ВКонтакте';
+                window.VK.WebApp.ready();
+                window.VK.WebApp.expand(); // Раскрыть на весь экран
             }
 
-            const calendarUrl = "https://calendar.yandex.ru/month?layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ";
-
-            button.addEventListener('click', () => {
-                if (window.VK && window.VK.WebApp) {
-                    // Открываем ссылку во встроенном браузере ВК
-                    window.VK.WebApp.openLink(calendarUrl);
-                } else {
-                    // Резерв: открыть в новой вкладке (если не в ВК)
-                    window.open(calendarUrl, '_blank');
-                }
+            // Скрываем лоадер после загрузки iframe
+            const frame = document.querySelector('.calendar-frame');
+            frame.addEventListener('load', () => {
+                document.getElementById('loader').style.display = 'none';
             });
         });
     </script>
