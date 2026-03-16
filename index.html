@@ -3,128 +3,122 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>МедМол: Уровень 1</title>
-    <meta name="theme-color" content="#e63946" />
+    <meta name="theme-color" content="#4c75a3" />
+    
+    <!-- Запрещаем кэширование (на время разработки) -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <title>Календарь МедМол УГМУ</title>
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #1d3557, #457b9d);
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            text-align: center;
+            margin-top: 60px;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
         .container {
             max-width: 600px;
             margin: 0 auto;
-            text-align: center;
+            padding: 20px;
         }
-        .logo {
-            width: 120px;
-            height: 120px;
-            background: #e63946;
-            border-radius: 50%;
-            margin: 40px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            font-weight: bold;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
+
         h1 {
+            color: #4c75a3;
             font-size: 28px;
-            margin-bottom: 12px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 16px;
         }
-        .level {
-            display: inline-block;
-            background: #ffd166;
-            color: #1d3557;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
+
         p {
-            color: #fff;
-            opacity: 0.9;
+            color: #555;
             font-size: 18px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
+
         .btn {
-            display: block;
-            width: 100%;
-            max-width: 320px;
-            margin: 20px auto;
-            padding: 16px;
+            display: inline-block;
+            padding: 16px 32px;
             font-size: 18px;
             font-weight: 600;
-            text-align: center;
-            color: #1d3557;
-            background: #ffd166;
+            color: white;
+            background-color: #4c75a3;
             border: none;
             border-radius: 12px;
+            text-decoration: none;
             cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-            transition: all 0.3s;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            user-select: none;
         }
+
         .btn:hover {
-            background: #f4a261;
+            background-color: #3a5a78;
             transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
-        .footer {
-            margin-top: 60px;
-            color: #fff;
-            opacity: 0.7;
-            font-size: 14px;
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        #loader {
+            font-size: 16px;
+            color: #666;
+            margin-top: 20px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🎓</div>
-        <h1>Добро пожаловать в МедМол!</h1>
-        <div class="level">Уровень 1: Расписание</div>
-        <p>Пройдите обучение и получите доступ к расписанию</p>
-
-        <button class="btn" id="start-btn">▶️ Начать обучение</button>
-        <button class="btn" id="calendar-btn">📅 Открыть календарь</button>
-        <button class="btn" id="website-btn">🌐 Официальный сайт УГМУ</button>
-
-        <div class="footer">© 2025 МедМол УГМУ • Мини-игра для студентов</div>
+        <h1>Календарь МедМол УГМУ</h1>
+        <p>Нажмите кнопку ниже, чтобы открыть календарь занятий.</p>
+        <a href="https://calendar.yandex.ru/month?layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ"
+           target="_blank"
+           class="btn"
+           id="open-calendar-btn">
+            Открыть календарь
+        </a>
+        <div id="loader">Загрузка приложения...</div>
     </div>
 
-    <!-- SDK ВКонтакте -->
+    <!-- Подключаем SDK ВКонтакте -->
     <script src="https://vk.com/js/api/xd_connection.js?2"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.VK?.WebApp) {
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const loader = document.getElementById('loader');
+
+            // Проверяем, загружено ли приложение в контексте ВКонтакте
+            if (window.VK && window.VK.WebApp) {
+                // Говорим ВК: приложение готово
                 window.VK.WebApp.ready();
-                window.VK.WebApp.expand();
+                loader.style.display = 'none';
+
+                // Опционально: расширить на весь экран
+                // window.VK.WebApp.expand();
+            } else {
+                // Не в контексте ВК — можно оставить лоадер или изменить текст
+                loader.textContent = 'Откройте через приложение ВКонтакте';
             }
 
-            const openLink = (url) => {
-                if (window.VK?.WebApp) {
-                    window.VK.WebApp.openLink(url);
-                } else {
-                    window.open(url, '_blank');
+            // Дополнительно: скрываем лоадер через 3 секунды
+            setTimeout(() => {
+                if (loader.style.display !== 'none') {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 300);
                 }
-            };
-
-            document.getElementById('start-btn').addEventListener('click', () => {
-                alert('🎯 Привет! Это обучающий уровень. Нажми "Календарь", чтобы перейти к расписанию.');
-            });
-
-            document.getElementById('calendar-btn').addEventListener('click', () => {
-                openLink('https://calendar.yandex.ru/embed/public?hash=ВАШ_ХЭШ_ЗДЕСЬ&lang=ru');
-            });
-
-            document.getElementById('website-btn').addEventListener('click', () => {
-                openLink('https://www.ugmu.ru');
-            });
+            }, 3000);
         });
     </script>
 </body>
