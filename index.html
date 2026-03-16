@@ -3,54 +3,120 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Календарь МедМол УГМУ</title>
+    <title>МедМол УГМУ</title>
+
+    <!-- Тема ВК -->
+    <meta name="theme-color" content="#4c75a3" />
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background-color: #f0f2f5;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-        .calendar-container {
-            flex: 1;
-            width: 100%;
-            border: none;
-            overflow: hidden;
-        }
-        .calendar-frame {
-            width: 100%;
-            height: 100%;
+            background: linear-gradient(135deg, #f0f2f5, #e0e4e9);
+            color: #333;
             min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: #4c75a3;
+            border-radius: 50%;
+            margin: 40px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+        }
+        h1 {
+            color: #4c75a3;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+        p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            color: white;
+            background-color: #4c75a3;
             border: none;
-            border-radius: 0;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(76, 117, 163, 0.2);
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #3a5a78;
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        footer {
+            margin-top: 60px;
+            color: #999;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <!-- Прямо встраиваем календарь -->
-    <div class="calendar-container">
-        <iframe 
-            class="calendar-frame"
-            src="https://calendar.yandex.ru/embed/month?&layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ"
-            frameborder="0"
-            allowfullscreen>
-        </iframe>
+    <div class="container">
+        <div class="logo">М</div>
+        <h1>МедМол УГМУ</h1>
+        <p>Ваш помощник в учебе и расписании</p>
+
+        <button class="btn" id="website-btn">Официальный сайт УГМУ</button>
+        <button class="btn" id="calendar-btn">Календарь занятий</button>
+
+        <footer>© 2025 Медицинская молекулярная школа УГМУ</footer>
     </div>
 
     <!-- Подключаем SDK ВКонтакте -->
     <script src="https://vk.com/js/api/xd_connection.js?2"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Говорим ВК: приложение готово
-            if (window.VK && window.VK.WebApp) {
+            // Инициализируем приложение
+            if (window.VK?.WebApp) {
                 window.VK.WebApp.ready();
-                window.VK.WebApp.expand(); // Открыть на весь экран
+                window.VK.WebApp.expand();
             }
+
+            // Кнопка: Официальный сайт
+            document.getElementById('website-btn').addEventListener('click', () => {
+                if (window.VK?.WebApp) {
+                    window.VK.WebApp.openLink('https://usma.ru/');
+                } else {
+                    window.open('https://usma.ru/', '_blank');
+                }
+            });
+
+            // Кнопка: Календарь
+            document.getElementById('calendar-btn').addEventListener('click', () => {
+                if (window.VK?.WebApp) {
+                    // Открываем календарь во встроенном браузере ВК
+                    window.VK.WebApp.openLink('https://calendar.yandex.ru/embed/month?&layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол УГМУ');
+                } else {
+                    window.open('https://calendar.yandex.ru/embed/month?&layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол УГМУ', '_blank');
+                }
+            });
         });
     </script>
 </body>
