@@ -4,11 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#4c75a3" />
-    <!-- Предотвращаем кэширование (на время разработки) -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-
     <title>Календарь МедМол УГМУ</title>
 
     <style>
@@ -19,7 +14,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             text-align: center;
             margin-top: 60px;
             background-color: #f0f2f5;
@@ -64,7 +59,6 @@
         .btn:hover {
             background-color: #3a5a78;
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
         .btn:active {
@@ -75,50 +69,43 @@
             font-size: 16px;
             color: #666;
             margin-top: 20px;
-            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Календарь МедМол УГМУ</h1>
-        <p>Нажмите кнопку ниже, чтобы открыть календарь занятий.</p>
-        <a href="https://calendar.yandex.ru/month?layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ"
-           target="_blank"
-           class="btn"
-           id="open-calendar-btn">
-            Открыть календарь
-        </a>
-        <div id="loader">Загрузка приложения...</div>
+        <p>Нажмите кнопку, чтобы открыть календарь прямо в приложении ВК.</p>
+        <button class="btn" id="open-calendar-btn">Открыть календарь</button>
+        <div id="loader">Готовимся к запуску...</div>
     </div>
 
     <!-- Подключаем SDK ВКонтакте -->
-    <script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
+    <script src="https://vk.com/js/api/xd_connection.js?2"></script>
     <script type="text/javascript">
-        // Проверяем, загружено ли приложение в iframe ВКонтакте
         document.addEventListener('DOMContentLoaded', function () {
+            const button = document.getElementById('open-calendar-btn');
             const loader = document.getElementById('loader');
 
-            // Ждём инициализации VK
+            // Проверяем, загружено ли приложение в контексте ВК
             if (window.VK && window.VK.WebApp) {
-                // Говорим ВК: приложение готово
-                window.VK.WebApp.ready();
+                window.VK.WebApp.ready(); // Обязательно!
                 loader.style.display = 'none';
-
-                // Опционально: расширить на весь экран
-                // window.VK.WebApp.expand();
             } else {
-                // Не в контексте ВК — можно оставить лоадер или скрыть
                 loader.textContent = 'Откройте через приложение ВКонтакте';
             }
 
-            // Дополнительно: скрываем лоадер через 3 секунды, если что-то пошло не так
-            setTimeout(() => {
-                if (loader.style.display !== 'none') {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.style.display = 'none', 300);
+            const calendarUrl = "https://calendar.yandex.ru/month?layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ";
+
+            button.addEventListener('click', () => {
+                if (window.VK && window.VK.WebApp) {
+                    // Открываем ссылку во встроенном браузере ВК
+                    window.VK.WebApp.openLink(calendarUrl);
+                } else {
+                    // Резерв: открыть в новой вкладке (если не в ВК)
+                    window.open(calendarUrl, '_blank');
                 }
-            }, 3000);
+            });
         });
     </script>
 </body>
