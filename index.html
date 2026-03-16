@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>МедМол УГМУ</title>
-
-    <!-- Тема ВК -->
-    <meta name="theme-color" content="#4c75a3" />
+    <title>МедМол: Уровень 1</title>
+    <meta name="theme-color" content="#e63946" />
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f0f2f5, #e0e4e9);
-            color: #333;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1d3557, #457b9d);
+            color: white;
             min-height: 100vh;
             padding: 20px;
         }
@@ -23,99 +21,109 @@
             text-align: center;
         }
         .logo {
-            width: 100px;
-            height: 100px;
-            background: #4c75a3;
+            width: 120px;
+            height: 120px;
+            background: #e63946;
             border-radius: 50%;
             margin: 40px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-size: 40px;
             font-weight: bold;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
         }
         h1 {
-            color: #4c75a3;
             font-size: 28px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .level {
+            display: inline-block;
+            background: #ffd166;
+            color: #1d3557;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 16px;
         }
         p {
-            color: #666;
+            color: #fff;
+            opacity: 0.9;
             font-size: 18px;
             margin-bottom: 40px;
         }
         .btn {
             display: block;
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
             margin: 20px auto;
             padding: 16px;
             font-size: 18px;
             font-weight: 600;
             text-align: center;
-            color: white;
-            background-color: #4c75a3;
+            color: #1d3557;
+            background: #ffd166;
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 6px 12px rgba(76, 117, 163, 0.2);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
             transition: all 0.3s;
-            text-decoration: none;
         }
         .btn:hover {
-            background-color: #3a5a78;
+            background: #f4a261;
             transform: translateY(-2px);
         }
-        .btn:active {
-            transform: translateY(0);
-        }
-        footer {
+        .footer {
             margin-top: 60px;
-            color: #999;
+            color: #fff;
+            opacity: 0.7;
             font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">М</div>
-        <h1>МедМол УГМУ</h1>
-        <p>Ваш помощник в учебе и расписании</p>
+        <div class="logo">🎓</div>
+        <h1>Добро пожаловать в МедМол!</h1>
+        <div class="level">Уровень 1: Расписание</div>
+        <p>Пройдите обучение и получите доступ к расписанию</p>
 
-        <button class="btn" id="website-btn">Официальный сайт УГМУ</button>
-        <button class="btn" id="calendar-btn">Календарь занятий</button>
+        <button class="btn" id="start-btn">▶️ Начать обучение</button>
+        <button class="btn" id="calendar-btn">📅 Открыть календарь</button>
+        <button class="btn" id="website-btn">🌐 Официальный сайт УГМУ</button>
 
-        <footer>© 2025 Медицинская молекулярная школа УГМУ</footer>
+        <div class="footer">© 2025 МедМол УГМУ • Мини-игра для студентов</div>
     </div>
 
-    <!-- Подключаем SDK ВКонтакте -->
+    <!-- SDK ВКонтакте -->
     <script src="https://vk.com/js/api/xd_connection.js?2"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Инициализируем приложение
             if (window.VK?.WebApp) {
                 window.VK.WebApp.ready();
                 window.VK.WebApp.expand();
             }
 
-            // Кнопка: Официальный сайт
-            document.getElementById('website-btn').addEventListener('click', () => {
+            const openLink = (url) => {
                 if (window.VK?.WebApp) {
-                    window.VK.WebApp.openLink('https://usma.ru/');
+                    window.VK.WebApp.openLink(url);
                 } else {
-                    window.open('https://usma.ru/', '_blank');
+                    window.open(url, '_blank');
                 }
+            };
+
+            document.getElementById('start-btn').addEventListener('click', () => {
+                alert('🎯 Привет! Это обучающий уровень. Нажми "Календарь", чтобы перейти к расписанию.');
             });
 
-            // Кнопка: Календарь
             document.getElementById('calendar-btn').addEventListener('click', () => {
-                if (window.VK?.WebApp) {
-                    // Открываем календарь во встроенном браузере ВК
-                    window.VK.WebApp.openLink('https://calendar.yandex.ru/embed/month?&layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол УГМУ');
-                } else {
-                    window.open('https://calendar.yandex.ru/embed/month?&layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол УГМУ', '_blank');
-                }
+                openLink('https://calendar.yandex.ru/embed/public?hash=ВАШ_ХЭШ_ЗДЕСЬ&lang=ru');
+            });
+
+            document.getElementById('website-btn').addEventListener('click', () => {
+                openLink('https://www.ugmu.ru');
             });
         });
     </script>
