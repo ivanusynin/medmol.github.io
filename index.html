@@ -1,125 +1,27 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#4c75a3" />
-    
-    <!-- Запрещаем кэширование (на время разработки) -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-
-    <title>Календарь МедМол УГМУ</title>
-
+    <meta charset="utf-8">
+    <!-- Важно для корректного отображения на мобильных устройствах -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МедМол УГМУ Календарь</title>
     <style>
-        * {
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Убираем скроллы у страницы */
         }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            text-align: center;
-            margin-top: 60px;
-            background-color: #f0f2f5;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        h1 {
-            color: #4c75a3;
-            font-size: 28px;
-            margin-bottom: 16px;
-        }
-
-        p {
-            color: #555;
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 16px 32px;
-            font-size: 18px;
-            font-weight: 600;
-            color: white;
-            background-color: #4c75a3;
-            border: none;
-            border-radius: 12px;
-            text-decoration: none;
-            cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-            user-select: none;
-        }
-
-        .btn:hover {
-            background-color: #3a5a78;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        #loader {
-            font-size: 16px;
-            color: #666;
-            margin-top: 20px;
-            font-style: italic;
+        iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: none; /* Убираем рамку */
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Календарь МедМол УГМУ</h1>
-        <p>Нажмите кнопку ниже, чтобы открыть календарь занятий.</p>
-        <a href="https://calendar.yandex.ru/month?layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ"
-           target="_blank"
-           class="btn"
-           id="open-calendar-btn">
-            Открыть календарь
-        </a>
-        <div id="loader">Загрузка приложения...</div>
-    </div>
-
-    <!-- Подключаем SDK ВКонтакте -->
-    <script src="https://vk.com/js/api/xd_connection.js?2"></script>
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            const loader = document.getElementById('loader');
-
-            // Проверяем, загружено ли приложение в контексте ВКонтакте
-            if (window.VK && window.VK.WebApp) {
-                // Говорим ВК: приложение готово
-                window.VK.WebApp.ready();
-                loader.style.display = 'none';
-
-                // Опционально: расширить на весь экран
-                // window.VK.WebApp.expand();
-            } else {
-                // Не в контексте ВК — можно оставить лоадер или изменить текст
-                loader.textContent = 'Откройте через приложение ВКонтакте';
-            }
-
-            // Дополнительно: скрываем лоадер через 3 секунды
-            setTimeout(() => {
-                if (loader.style.display !== 'none') {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.style.display = 'none', 300);
-                }
-            }, 3000);
-        });
-    </script>
+    <iframe src="https://calendar.yandex.ru/embed/month?&layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол УГМУ" allowfullscreen></iframe>
 </body>
 </html>
