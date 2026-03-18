@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <!-- Важно для корректного отображения на мобильных устройствах -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МедМол УГМУ Календарь</title>
     <style>
@@ -11,17 +10,41 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* Убираем скроллы у страницы */
+            overflow: hidden;
         }
         iframe {
             display: block;
             width: 100%;
             height: 100%;
-            border: none; /* Убираем рамку */
+            border: none;
         }
     </style>
 </head>
 <body>
-    <iframe src="https://calendar.yandex.ru/embed/month?layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ" allowfullscreen></iframe>
+    <iframe src="https://calendar.yandex.ru/embed/month?&layer_ids=34342013&tz_id=Asia/Yekaterinburg&layer_names=МедМол%20УГМУ" allowfullscreen></iframe>
+
+    <!-- Подключаем библиотеку VK Bridge -->
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
+    <script>
+      // Функция для инициализации и отправки сигнала о загрузке
+      async function initApp() {
+        try {
+          // Убедимся, что библиотека vkBridge доступна
+          if (window.vkBridge) {
+            // Инициализируем мост (отправляет важные данные о запуске)
+            await window.vkBridge.send('VKWebAppInit');
+            console.log('VK Bridge инициализирован и приложение готово к работе.');
+          } else {
+            console.error('Библиотека VK Bridge не загрузилась.');
+          }
+        } catch (error) {
+          console.error('Ошибка при инициализации VK Bridge:', error);
+        }
+      }
+
+      // Запускаем функцию, когда весь контент страницы загрузится
+      window.addEventListener('load', initApp);
+    </script>
 </body>
 </html>
